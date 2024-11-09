@@ -12,7 +12,7 @@ void janelaLinha(int ci, int li, int cf, int lf, int corL, int corF, char msg[])
 void janelaFundo(int cI, int lI, int cF, int lF, int corF);
 void menu();
 void limpaAviso();
-void cadastro(char us[50], char senh[50]);
+void cadastro();
 void criptografar(char str[]); 
 void descriptografarSTR(char str[]);
 void descriptografarTXT();
@@ -27,13 +27,13 @@ void alterarTxt();
 //========================================================================================
 
 int main() {
-	char usuario[50],senha1[50],senhaConf[50], usExcluido[50];
+	char  usExcluido[50];
 	int tecla, opc, i, l, lE;
 	l = 1;
 	bool sair = false;
+	
 	janelaLinha(10,7,24,19,0,7,"Bem vindo!"); 
 	janelaFundo(11, 8, 24, 19, 7);	
-	
 	do{
 		opc=115;
 
@@ -81,102 +81,7 @@ int main() {
     	
     	if(tecla==13)switch(l){
 				case 1: 
-				while(opc!=27){
-					janelaLinha(27,6,80,20,14,0,"Inserir=Dados");
-					textcolor(7);
-					gotoxy(29,8); printf("informe o usuario: "); 
-					gotoxy(48, 8); printf("                                ");
-					gotoxy(29,9); printf("digite a senha: ");
-					gotoxy(45, 9); printf("                                   ");
-					gotoxy(29,10); printf("confirme a senha: ");
-					gotoxy(47, 10); printf("                                ");
-                    limpaAviso(28, 80, 11, 20);
-					do{
-                    	gotoxy(48, 8); fgets(usuario, 100, stdin);
-                    	usuario[strcspn(usuario, "\n")] = 0; 
-                    	criptografar(usuario);
-                    	if(strlen(usuario)<3 || strlen(usuario)>16){
-                    		limpaAviso(28, 80, 11, 20);
-							textcolor(RED);
-                    		gotoxy(38, 12); printf("Minimo 3 caracteres e maximo 16!");
-                    		gotoxy(48, 8); printf("                                ");
-							textcolor(7);
-						}else if(validaUsuario(usuario)){
-							limpaAviso(28, 80, 11, 20);
-							textcolor(RED);
-                    		gotoxy(42, 12); printf("Este usuario ja existe!");
-                    		gotoxy(48, 8); printf("                                ");
-							textcolor(7);
-						}
-						else{
-							descriptografarSTR(usuario);
-							textbackground(GREEN);
-							gotoxy(48, 8); printf("%s", usuario);
-							textbackground(0);	
-						}
-                	}while(validaUsuario(usuario));
-					
-					limpaAviso(28, 80, 11, 20);
-					do{
-                    	gotoxy(45, 9); fgets(senha1, 50, stdin);
-                    	senha1[strcspn(senha1, "\n")] = 0; 
-                    	if (!senhaForte(senha1)) {
-                    		textcolor(RED);
-                        	gotoxy(29, 12); printf("ERRO!! a senha deve conter pelo menos:");
-                        	gotoxy(29, 13); printf("1 numero, 1 caracter especial e 1 letra maiuscula");
-                        	gotoxy(45, 9); printf("                                   ");
-                        	textcolor(7);
-                    	}else{
-                    		textbackground(GREEN);
-							for(i=0;i<strlen(senha1);i++){
-								gotoxy(45+i, 9); printf("*");	
-							}
-							textbackground(0);	
-						}
-					}while(!senhaForte(senha1));
-					
-					limpaAviso(28, 80, 11, 20);
-					do{
-                    	gotoxy(47, 10); fgets(senhaConf, 50, stdin);
-                    	senhaConf[strcspn(senhaConf, "\n")] = 0; 
-                    	if (strcmp(senha1, senhaConf)) {
-                    		textcolor(RED);
-                        	gotoxy(37, 12); printf("Erro: as senhas nao coincidem!");
-                        	gotoxy(47, 10); printf("                                ");
-                        	textcolor(7);
-                    	}else{
-                    		textbackground(GREEN);
-							for(i=0;i<strlen(senhaConf);i++){
-								gotoxy(47+i, 10); printf("*");	
-							}
-							textbackground(0);	
-						}	
-						
-					}while(strcmp(senha1, senhaConf));
-                    
-                    criptografar(usuario);
-                    criptografar(senha1);
-					cadastro(usuario,senha1);
-                    limpaAviso(28, 80, 11, 20);
-                    textcolor(GREEN);
-					gotoxy(38, 13); printf("Usuario cadastrado com sucesso!");
-					textcolor(15);
-					Sleep(100);
-					gotoxy(29,16);
-					printf("Pressione ESC para voltar ao menu..");
-					gotoxy(29,17);
-					printf("ENTER para um novo cadastro");
-					opc=_getch();
-					if(opc < 0 || opc == 0 || opc == 244){
-    					opc = _getch();
-    					}
-    				while(opc!=27 && opc!=13){
-    					opc = _getch();
-						if(opc < 0 || opc == 0 || opc == 244){
-    						opc = _getch();
-    						}
-						}
-    				}
+					cadastro();
                     clrscr(); 
 					janelaLinha(10,7,24,19,0,7,"Bem vindo!"); 
 					janelaFundo(11, 8, 24, 19, 7);
@@ -192,16 +97,16 @@ int main() {
 						gotoxy(34,19);
 						fgets(usExcluido, 50, stdin);
 						usExcluido[strcspn(usExcluido, "\n")] = 0;
-					if(excluirUsuario(usExcluido)){
-						textcolor(GREEN);
-						gotoxy(34,21); printf("Usuario excluido com sucesso!");
-						textcolor(15);
-					}else if(excluirUsuario(usExcluido)==false){
-						textcolor(RED);
-						gotoxy(29,21);
-						printf("Erro ao abrir o arquivo ou o usuario nao existe!");
-						textcolor(15);
-					}
+						if(excluirUsuario(usExcluido)){
+							textcolor(GREEN);
+							gotoxy(34,21); printf("Usuario excluido com sucesso!");
+							textcolor(15);
+						}else if(excluirUsuario(usExcluido)==false){
+							textcolor(RED);
+							gotoxy(29,21);
+							printf("Erro ao abrir o arquivo ou o usuario nao existe!");
+							textcolor(15);
+						}
 						Sleep(500);
 						limpaAviso(27, 80, 18, 25);
 						gotoxy(30,23);
@@ -209,9 +114,9 @@ int main() {
 						gotoxy(30,24);
 						printf("ENTER para nova exclusao..");
 						opc = _getch();
-					if(opc < 0 || opc == 0 || opc == 244){
-    					opc = _getch();
-    				}
+						if(opc < 0 || opc == 0 || opc == 244){
+    						opc = _getch();
+    					}
     				}while(opc != 27);
     				clrscr(); 
 					janelaLinha(10,7,24,19,0,7,"Bem vindo!"); 
@@ -225,16 +130,12 @@ int main() {
 					janelaFundo(11, 8, 24, 19, 7);
 					break;
 				case 5: sair=true; 
-				gotoxy(8,23);
-				system("pause");
-				clrscr(); break;
+					gotoxy(8,23);
+					system("pause");
+					clrscr(); 
+					break;
 			}
 	}while(tecla!=27 && sair!=true);
-		
-	
-	
-	
-	
 	textcolor(15);
 	textbackground(0);
     return 0;
@@ -301,7 +202,6 @@ void selectionSort(char usuario[][50], char senha[][50], int n) {
     
     for (i = 0; i < n - 1; i++) {
         min_idx = i;
-        
         for (j = i + 1; j < n; j++) {
             if (strcmp(usuario[j], usuario[min_idx]) < 0) {
                 min_idx = j;
@@ -375,7 +275,7 @@ bool validaUsuario(char us[50]){ //funcao para ver se o usuario ja existe
 }
 
 //===================================================================================
-//28-80  11-20
+
 void limpaAviso(int colI, int colF, int lI, int lF){
 	int i, j;
 	
@@ -389,35 +289,6 @@ void limpaAviso(int colI, int colF, int lI, int lF){
 
 //===================================================================================
 
-void cadastro(char us[50], char senh[50]){
-	FILE *arquivo;
-	arquivo = fopen("senhacptfds.txt", "a");
-	char usuariotxt[50][50], senhatxt[50][50];
-	int tot, i;
-	
-	if(arquivo == NULL){
-		printf("Erro ao abrir arquivo!\n");
-	}else{
-		fprintf(arquivo, "%s %s\n", us, senh);  // Salva o usuário e a senha no arquivo
-		fclose(arquivo);
-	}
-	
-	arquivo = fopen("senhacptfds.txt", "r");
-	while(fscanf(arquivo, "%s %s", usuariotxt[tot], senhatxt[tot])!= EOF){
-		tot++;
-	}
-	fclose(arquivo);
-	
-	arquivo = fopen("senhacptfds.txt", "w");
-	selectionSort(usuariotxt, senhatxt, tot);
-	for(i=0;i<tot;i++){
-		fprintf(arquivo, "%s %s\n", usuariotxt[i], senhatxt[i]);
-	}
-	fclose(arquivo);
-}
-
-//===================================================================================
-
 void criptografar(char str[]) {
 	int i;
     for (i = 0; str[i] != '\0'; i++) {
@@ -425,13 +296,144 @@ void criptografar(char str[]) {
     }
 }
 
+
+
 //===================================================================================
 
 void descriptografarSTR(char str[]){
 	int i;
     for (i = 0; str[i] != '\0'; i++) {
-        str[i] = str[i]  - i - 4;  
+        str[i] = str[i] - i - 4;  
     }	
+}
+
+//===================================================================================
+
+void cadastro() {
+    FILE *arquivo;
+    char usuariotxt[50][50], senhatxt[50][50];
+    char usuario[50], senha1[50], senhaConf[50];
+    int tot = 0, i, opc;
+
+    while (opc != 27) {
+        janelaLinha(27, 6, 80, 20, 14, 0, "Inserir=Dados");
+        textcolor(7);
+
+        gotoxy(29, 8); printf("informe o usuario: ");
+        gotoxy(48, 8); printf("                                ");
+        gotoxy(29, 9); printf("digite a senha: ");
+        gotoxy(45, 9); printf("                                   ");
+        gotoxy(29, 10); printf("confirme a senha: ");
+        gotoxy(47, 10); printf("                                ");
+        limpaAviso(28, 80, 11, 20);
+
+        do {
+            gotoxy(48, 8); fgets(usuario, 100, stdin);
+            usuario[strcspn(usuario, "\n")] = 0;
+            criptografar(usuario);
+
+            if (strlen(usuario) < 3 || strlen(usuario) > 16) {
+                limpaAviso(28, 80, 11, 20);
+                textcolor(RED);
+                gotoxy(38, 12); printf("Minimo 3 caracteres e maximo 16!");
+                gotoxy(48, 8); printf("                                ");
+                textcolor(7);
+            } else if (validaUsuario(usuario)) {
+                limpaAviso(28, 80, 11, 20);
+                textcolor(RED);
+                gotoxy(42, 12); printf("Este usuario ja existe!");
+                gotoxy(48, 8); printf("                                ");
+                textcolor(7);
+            } else {
+                descriptografarSTR(usuario);
+                textbackground(GREEN);
+                gotoxy(48, 8); printf("%s", usuario);
+                textbackground(0);
+            }
+        } while (validaUsuario(usuario));
+
+        limpaAviso(28, 80, 11, 20);
+
+        do {
+            gotoxy(45, 9); fgets(senha1, 50, stdin);
+            senha1[strcspn(senha1, "\n")] = 0;
+
+            if (!senhaForte(senha1)) {
+                textcolor(RED);
+                gotoxy(29, 12); printf("ERRO!! a senha deve conter pelo menos:");
+                gotoxy(29, 13); printf("1 numero, 1 caracter especial e 1 letra maiuscula");
+                gotoxy(45, 9); printf("                                   ");
+                textcolor(7);
+            } else {
+                textbackground(GREEN);
+                for (i = 0; i < strlen(senha1); i++) {
+                    gotoxy(45 + i, 9); printf("*");
+                }
+                textbackground(0);
+            }
+        } while (!senhaForte(senha1));
+
+        limpaAviso(28, 80, 11, 20);
+
+        do {
+            gotoxy(47, 10); fgets(senhaConf, 50, stdin);
+            senhaConf[strcspn(senhaConf, "\n")] = 0;
+
+            if (strcmp(senha1, senhaConf)) {
+                textcolor(RED);
+                gotoxy(37, 12); printf("Erro: as senhas nao coincidem!");
+                gotoxy(47, 10); printf("                                ");
+                textcolor(7);
+            } else {
+                textbackground(GREEN);
+                for (i = 0; i < strlen(senhaConf); i++) {
+                    gotoxy(47 + i, 10); printf("*");
+                }
+                textbackground(0);
+            }
+        } while (strcmp(senha1, senhaConf));
+
+        criptografar(usuario);
+        criptografar(senha1);
+
+        arquivo = fopen("senhacptfds.txt", "a");
+        if (arquivo == NULL) {
+            printf("Erro ao abrir arquivo!\n");
+        } else {
+            fprintf(arquivo, "%s %s\n", usuario, senha1);
+            fclose(arquivo);
+        }
+
+        arquivo = fopen("senhacptfds.txt", "r");
+        while (fscanf(arquivo, "%s %s", usuariotxt[tot], senhatxt[tot]) != EOF) {
+            tot++;
+        }
+        fclose(arquivo);
+
+        arquivo = fopen("senhacptfds.txt", "w");
+        selectionSort(usuariotxt, senhatxt, tot);
+        for (i = 0; i < tot; i++) {
+            fprintf(arquivo, "%s %s\n", usuariotxt[i], senhatxt[i]);
+        }
+        fclose(arquivo);
+
+        limpaAviso(28, 80, 11, 20);
+        textcolor(GREEN);
+        gotoxy(38, 13); printf("Usuario cadastrado com sucesso!");
+        textcolor(15);
+
+        Sleep(100);
+        gotoxy(29, 16); printf("Pressione ESC para voltar ao menu..");
+        gotoxy(29, 17); printf("ENTER para um novo cadastro");
+       
+	    opc = _getch();
+        while (opc != 27 && opc != 13) {
+            opc = _getch();
+            if (opc < 0 || opc == 0 || opc == 244) {
+                opc = _getch();
+            }
+        }
+    }
 }
 
 //===================================================================================
@@ -572,11 +574,13 @@ bool excluirUsuario(char us[]) {
 		return false;
 	}
 }
+
 //======================================================================================
+
 void alterarTxt(){
 	descriptografarTXT("Alterar");
 	FILE *arquivo;
-    char us1[2][50], usuario[50][50], senha[50][50];
+    char us1[2][50], snh1[50], usuario[50][50], senha[50][50];
     bool usEncontrado = false;
     int tot = 0, i, j;
 	
@@ -589,8 +593,16 @@ void alterarTxt(){
 	gotoxy(35,19);
 	printf("Informe o novo usuario:");
 	gotoxy(35,20);
-	fgets(us1[1], 50, stdin);
+	fgets(us1[1], sizeof(us1), stdin);
 	us1[1][strcspn(us1[1], "\n")] = 0;
+	do{
+		limpaAviso(30,78,19,21);
+		gotoxy(35,19);
+		printf("Informe a nova senha:");
+		gotoxy(35,20);
+		fgets(snh1, sizeof(snh1), stdin);
+		snh1[strcspn(snh1, "\n")] = 0;
+	}while(!senhaForte(snh1));
 	
     arquivo = fopen("senhacptfds.txt", "r");
     if (arquivo == NULL) {
@@ -599,8 +611,10 @@ void alterarTxt(){
     
     while (fscanf(arquivo, "%s %s", usuario[tot], senha[tot]) != EOF) {
         descriptografarSTR(usuario[tot]); 
+        descriptografarSTR(senha[tot]);
         if(strcmp(usuario[tot], us1[0]) == 0){
         	strcpy(usuario[tot], us1[1]);
+        	strcpy(senha[tot], snh1);
         	usEncontrado=true;
 		}
         tot++;
@@ -611,6 +625,7 @@ void alterarTxt(){
     	arquivo = fopen("senhacptfds.txt", "w");
     	for(i=0;i<tot;i++){
     		criptografar(usuario[i]);
+    		criptografar(senha[i]);
     		fprintf(arquivo,"%s %s\n", usuario[i], senha[i]);
 		}
 		fclose(arquivo);
